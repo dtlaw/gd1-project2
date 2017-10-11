@@ -32,6 +32,10 @@
 
 		// Enforce that we only track one pointer at a time
 		game.input.MAX_POINTERS = 1;
+		game.scale.ScaleMode = Phaser.ScaleManager.SHOW_ALL;
+		// game.scale.pageAlignVertically = true;
+		// game.scale.pageAlignHorizontally = true;
+		game.scale.setMinMax(window.screen.availWidth, window.screen.availHeight);
 
 		let tapButton = game.add.button(game.world.centerX - 450, game.world.centerY, "button", clickTap, this);
 		tapButton.scale.setTo(10, 10);

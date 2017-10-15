@@ -2,11 +2,10 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8" />
-    <title>Learning Phaser</title>
+    <title>Steel Bridge Defender</title>
 	<script type="text/javascript" src="js/phaser.min.js"></script>
 	<script type="text/javascript" src="preload.js"></script>
-	<script type="text/javascript" src="tapMove.js"></script>
-	<script type="text/javascript" src="swipeMove.js"></script>
+	<script type="text/javascript" src="gameplay.js"></script>
     <style type="text/css">
         body {
             margin: 0;
@@ -37,13 +36,11 @@
 		// game.scale.pageAlignHorizontally = true;
 		game.scale.setMinMax(window.screen.availWidth, window.screen.availHeight);
 
-		let tapButton = game.add.button(game.world.centerX - 450, game.world.centerY, "button", clickTap, this);
-		tapButton.scale.setTo(10, 10);
-		let tapText = game.add.text(game.world.centerX - 400, game.world.centerY - 100, "Mode 1", style);
-
-		let swipeButton = game.add.button(game.world.centerX + 150, game.world.centerY, "button", clickSwipe, this);
-		swipeButton.scale.setTo(10, 10);
-		let swipeText = game.add.text(game.world.centerX + 200, game.world.centerY - 100, "Mode 2", style);
+		let playButton = game.add.button(game.world.centerX, game.world.centerY, "button", clickPlay, this);
+		playButton.scale.setTo(10, 10);
+		playButton.anchor.setTo(0.5, 0);
+		let playText = game.add.text(game.world.centerX, game.world.centerY - 100, "Play", style);
+		playText.anchor.setTo(0.5, 0.5);
 
 		game.state.add("Preload", preloadState);
 	}
@@ -53,19 +50,10 @@
 
 	}
 
-	function clickTap() {
-		game.state.add("Gameplay", tapMoveState);
+	function clickPlay() {
+		game.state.add("Gameplay", gamePlayState);
 		game.state.start("Preload");
 	}
-
-	function clickSwipe() {
-		game.state.add("Gameplay", swipeMoveState);
-		game.state.start("Preload");
-	}
-
-
-
-
 </script>
 
 </body>

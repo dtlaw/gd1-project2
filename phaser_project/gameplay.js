@@ -1,14 +1,14 @@
-let swipeMoveState = function() {
+let gamePlayState = function() {
 
 }
 
 // const swipeDistance = 200;
 
-swipeMoveState.prototype.gameplay = function() {
+gamePlayState.prototype.gameplay = function() {
     // NOTHING GOES HERE
 }
 
-swipeMoveState.prototype.create = function() {
+gamePlayState.prototype.create = function() {
     let style = {
         font: "32px Arial",
         fill: "#ffffff",
@@ -29,11 +29,11 @@ swipeMoveState.prototype.create = function() {
     game.input.onDown.add(this.musicBlast, this);
 }
 
-swipeMoveState.prototype.update = function() {
+gamePlayState.prototype.update = function() {
 
 }
 
-swipeMoveState.prototype.musicBlast = function() {
+gamePlayState.prototype.musicBlast = function() {
     console.log("he attac");
     let attack = this.attacks.create(this.player.x, this.player.y, "attack");
     attack.scale.setTo(0.35, 0.35);

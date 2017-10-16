@@ -30,7 +30,7 @@ gamePlayState.prototype.create = function() {
     this.player.lane = 2;
 
     // Reevaluate Scale after we get actual assets, this is just for the placeholders
-    this.player.scale.setTo(0.35, 0.35);
+    // this.player.scale.setTo(1, 1);
 
     game.input.onUp.add(this.inputCheck, this);
 }
@@ -62,7 +62,7 @@ gamePlayState.prototype.inputCheck = function() {
 
 gamePlayState.prototype.musicBlast = function() {
     let attack = this.attacks.create(this.player.x, this.player.y, "attack");
-    attack.scale.setTo(0.35, 0.35);
+    // attack.scale.setTo(0.35, 0.35);  // Again, this was for the placeholders
     attack.body.velocity.x = -200;
 
     // Kill offscreen objectss

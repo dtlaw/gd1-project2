@@ -27,12 +27,18 @@ gamePlayState.prototype.create = function() {
     game.add.text(game.world.centerX - 150, 96, "Tap to fire an attack", style);
 
     this.player = game.add.sprite( lanes[2].x, lanes[2].y, "player");
-    this.player.lane = 2;
+    this.player.lane = 1;
+    this.player.animations.add("idle", [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+    let attackAnim = this.player.animations.add("attack",[8, 9, 10, 11, 12, 13, 14], 10, false);
+    attackAnim.onComplete.add(this.resetAnim, this);
 
     // Reevaluate Scale after we get actual assets, this is just for the placeholders
     // this.player.scale.setTo(1, 1);
 
     game.input.onUp.add(this.inputCheck, this);
+
+    this.player.animations.play("idle");
+
 }
 
 gamePlayState.prototype.update = function() {
@@ -60,7 +66,12 @@ gamePlayState.prototype.inputCheck = function() {
     }
 }
 
+gamePlayState.prototype.resetAnim = function() {
+    this.player.animations.play("idle");
+}
+
 gamePlayState.prototype.musicBlast = function() {
+    this.player.animations.play("attack");
     let attack = this.attacks.create(this.player.x, this.player.y, "attack");
     // attack.scale.setTo(0.35, 0.35);  // Again, this was for the placeholders
     attack.body.velocity.x = -200;

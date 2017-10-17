@@ -15,10 +15,14 @@ gamePlayState.prototype.create = function() {
         align: "center"
     }
 
-    lanes[0] = new Phaser.Point(game.world.width - 200, game.world.height - 550);
-    lanes[1] = new Phaser.Point(game.world.width - 200, game.world.height - 400);
-    lanes[2] = new Phaser.Point(game.world.width - 200, game.world.height - 250);
-    lanes[3] = new Phaser.Point(game.world.width - 200, game.world.height - 100);
+    game.add.sprite(0,0, "road");
+
+    let gHeight = game.world.height;
+    let buff = 75; // Buffer for "top" of screen (water side of bridge)
+    lanes[0] = new Phaser.Point(game.world.width - 200, gHeight - ((gHeight-buff)));
+    lanes[1] = new Phaser.Point(game.world.width - 200, gHeight - ((gHeight-buff)/4*3));
+    lanes[2] = new Phaser.Point(game.world.width - 200, gHeight - ((gHeight-buff)/4*2));
+    lanes[3] = new Phaser.Point(game.world.width - 200, gHeight - (gHeight-buff)/4);
 
     this.attacks = game.add.group();
     this.attacks.enableBody = true;

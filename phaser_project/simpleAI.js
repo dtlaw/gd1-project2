@@ -26,17 +26,30 @@ gameplayState.prototype.create = function() {
 	this.enemies.enableBody = true;
 	// No gravity because arial view
 	for (let i = 0; i < 5; i++) {
-		// Eventully the i*30 y-pos will be replaced by a
+		// Eventually the i*30 y-pos will be replaced by a
 		// random spawn b/n the 4 lanes of the game
+			// curently not random**
 		let enemy = this.enemies.create(0, i*30, "enemy");
 		enemy.body.gravity.y = 0;
 		enemy.body.velocity.x = 80;
 	}
+	this.enemies.animations.add("move", [0], 10, true);
 }
 
 gameplayState.prototype.update = function() {
 	game.physics.arcade.collide(this.enemies, this.player, this.playerHealth, null, this);
 	game.physics.arcade.collide(this.pAttack, this.enemies, this.enemyHealth, null, this);
+
+}
+
+gameplayState.prototype.playerHealth = function(enemy, player) {
+	// Here is where player health will deteriorate from an enemy
+	// Total health for player depends on bridge health (3 hits?)
+	// if (playerHealth <= 1) {
+	// 	player dies/bridge falls
+	//} else { playerHealth = playerHealth-1; }
+	// Enemy disappears after causing damage
+	enemy.kill();
 }
 
 gameplayState.prototype.enemyHealth = function(pAttack, enemy) {

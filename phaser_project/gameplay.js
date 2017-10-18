@@ -19,6 +19,8 @@ gamePlayState.prototype.create = function() {
     this.lanes = new Array(4);
     // Bridge Health (aka player health for the game)
     this.bridgeHealth = 3;
+    this.bridge = game.add.sprite( game.world.width / 2, game.world.height / 2, "bridge" );
+    this.bridgeDamage.visible = false;
     this.gameWon = false;
     this.gameLost = false;
 
@@ -72,19 +74,17 @@ gamePlayState.prototype.create = function() {
 
 // New for ES6: function to "pause" for certain amount of time
 function sleep(ms) {
-    //this.canAttack = false;
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-/*async function enemySpawn() {*/
 async function enemySpawn(gLink, wave) {
     gLink.enemies = game.add.group();
     gLink.enemies.enableBody = true;
     let waveSize = 3+(3*wave);
     let havePaused = false;
-    // No gravity because arial view
+
+    // No gravity because aerial view
     for (let i = 0; i < waveSize; i++) {
-        //if (i < 4) {
         // Random in-lane spawn
         let randPos = Math.floor(Math.random()*4);
         let randEnemy = Math.floor(Math.random()*2);
@@ -124,7 +124,6 @@ async function enemySpawn(gLink, wave) {
             enemy.body.velocity.x = 70;
             enemy.animations.play("move");
         }
-        //}
         await sleep(1200);
     }
     //await sleep(12000);
@@ -144,8 +143,8 @@ gamePlayState.prototype.update = function() {
     console.log("enemies left: " + this.enemies.length);
     if (this.enemies.length === 0) {
         console.log("NO MORE ENEMIES LEFT! Wave: " + this.wave);
-        if (this.wave < 3) {
-            this.wave = this.wave+1;
+        if (this.wave < 4) {
+            ++this.wave;
             console.log("NEXT WAVE!");
             enemySpawn(this, this.wave);
         } else {
@@ -154,8 +153,6 @@ gamePlayState.prototype.update = function() {
             console.log("YOU WON THE GAME!");
         }
     }
-    // Delete any sprites that have gone off the right side of map
-    // *FINISH*
 }
 
 gamePlayState.prototype.enemyHealth = function(attack, enemy) {
@@ -191,7 +188,8 @@ gamePlayState.prototype.bridgeDamage = async function( enemy ) {
         game.paused = true;
         this.road.visible = false;
         this.player.visible = false;
-        // this.enemies.visible = false;
+        this.enemies.visible = false;
+        this.bridge.visible = true;
         game.input.enabled = false;
 
         if ( this.bridgeHealth === 3 ) {
@@ -208,6 +206,7 @@ gamePlayState.prototype.bridgeDamage = async function( enemy ) {
         this.road.visible = true;
         this.player.visible = true;
         this.enemies.visible = true;
+        this.bridge.visible = false;
         game.input.enabled = true;
         game.paused = false;
         --this.bridgeHealth;
@@ -257,7 +256,6 @@ gamePlayState.prototype.musicBlast = function() {
         let attack = this.attacks.create(this.player.x, this.player.y, "attack");
         attack.animations.add("move", [0, 1, 2], 15, true);
         attack.animations.play("move");
-        // attack.scale.setTo(0.35, 0.35);  // Again, this was for the placeholders
         attack.body.velocity.x = -200;
 
         // Kill offscreen objectss

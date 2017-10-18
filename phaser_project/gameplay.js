@@ -37,8 +37,6 @@ gamePlayState.prototype.create = function() {
     this.attacks = game.add.group();
     this.attacks.enableBody = true;
 
-    this.bridgeBG = game.add.sprite(0, 0, "background");
-    this.bridgeBG.visible = false;
 
     // game.add.text(game.world.centerX - 250, 48, "Swipe up or down to change lanes", style);
     // game.add.text(game.world.centerX - 150, 96, "Tap to fire an attack", style);

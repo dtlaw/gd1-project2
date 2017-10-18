@@ -41,8 +41,9 @@ gamePlayState.prototype.create = function() {
     this.player.lane = 1;
     this.player.canAttack = true;
     this.player.animations.add("idle", [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
-    let attackAnim = this.player.animations.add("attack",[8, 9, 10, 11, 12, 13, 14], 10, false);
+    let attackAnim = this.player.animations.add("attack",[9, 10, 11, 12, 13, 14, 15], 10, false);
     attackAnim.onComplete.add(this.resetAnim, this);
+    this.player.animations.add("flinch", [8, 16], 60, true);
 
     this.player.attackSounds = new Array( 4 );
     this.player.attackSounds[ 0 ] = game.add.audio( "aChord" );
@@ -115,6 +116,10 @@ async function enemySpawn(gLink) {
         await sleep(2000);
     }
 }
+async function playerHit(gLink) {
+    gLink.
+}
+
 gamePlayState.prototype.update = function() {
     game.physics.arcade.overlap(this.attacks, this.enemies, this.enemyHealth, null, this);
     game.physics.arcade.overlap(this.enemies, this.player, this.bridgeDamage, null, this);
@@ -128,6 +133,7 @@ gamePlayState.prototype.enemyHealth = function(attack, enemy) {
     // Total health for an enemy depends on the type of enemy
     if (enemy.health > 1) { // For businessman enemies
         enemy.health = enemy.health-1;
+
     } else { // Construction enemies and Half-health businessmen
         enemy.kill();
     }
@@ -147,11 +153,11 @@ gamePlayState.prototype.bridgeDamage = function(enemy, player) {
 
         }
         // Update health
-        bridgeHealth = bridgeHealth-1;
+        --bridgeHealth;
     } else {
         // Right side explosion
         // End game state
-        
+
     }
 
 }

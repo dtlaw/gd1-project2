@@ -2,10 +2,6 @@ let gamePlayState = function() {
 
 }
 
-gamePlayState.prototype.gameplay = function() {
-    // NOTHING GOES HERE
-}
-
 gamePlayState.prototype.create = function() {
     let style = {
         font: "32px Arial",
@@ -14,7 +10,6 @@ gamePlayState.prototype.create = function() {
     }
 
     this.downPos = 0;
-
 
     this.lanes = new Array(4);
     // Bridge Health (aka player health for the game)
@@ -57,8 +52,6 @@ gamePlayState.prototype.create = function() {
     this.player.attackSounds[ 2 ] = game.add.audio( "fChord" );
     this.player.attackSounds[ 3 ] = game.add.audio( "gChord" );
 
-    // Reevaluate Scale after we get actual assets, this is just for the placeholders
-    // this.player.scale.setTo(1, 1);
     game.input.onDown.add(this.setDownPos, this);
 
     game.input.onUp.add(this.inputCheck, this);
@@ -88,7 +81,10 @@ async function enemySpawn(gLink, wave) {
         // Random in-lane spawn
         let randPos = Math.floor(Math.random()*4);
         let randEnemy = Math.floor(Math.random()*2);
-        if (wave === 1) {
+        if(gLink.gameLost || gLink.gameWon) {
+            // Do nothing, we want no enemies in these cases
+        }
+        else if (wave === 1) {
             randEnemy = 0;
         } else if (wave === 3) {
             randEnemy = 1;
@@ -158,7 +154,7 @@ gamePlayState.prototype.update = function() {
 
     // Check all enemies defeated here!
     console.log("enemies left: " + this.enemies.length);
-    if (this.enemies.length === 0) {
+    if (!this.gameLost && this.enemies.length === 0) {
         console.log("NO MORE ENEMIES LEFT! Wave: " + this.wave);
         if (this.wave < 4) {
             ++this.wave;
@@ -166,8 +162,13 @@ gamePlayState.prototype.update = function() {
             enemySpawn(this, this.wave);
         } else {
             // Stop all animations: Game is Won!
-            this.gameWon = true;
-            console.log("YOU WON THE GAME!");
+            if(!this.gameWon) {
+                this.gameWon = true;
+                this.player.canAttack = false;
+                game.add.sprite(0, 0, "winScreen");
+
+                console.log("YOU WON THE GAME!");
+            }
         }
     }
 }
@@ -213,7 +214,7 @@ gamePlayState.prototype.bridgeDamage = async function( enemy ) {
 
         }
 
-        console.log( this.bridgeHealth );
+        // console.log( this.bridgeHealth );
 
         await sleep( 2000 );
         this.road.visible = true;
@@ -226,13 +227,16 @@ gamePlayState.prototype.bridgeDamage = async function( enemy ) {
     } else {
         // Right side explosion
         // End game state
-        this.gameLost = true;
+        if(!this.gameLost) {
+            this.gameLost = true;
+            this.player.canAttack = false;
+            game.add.sprite(0, 0, "gameOver");
+        }
     }
 }
 
 gamePlayState.prototype.setDownPos = function() {
     this.downPos = game.input.activePointer.position.y;
-
 }
 
 gamePlayState.prototype.inputCheck = function() {

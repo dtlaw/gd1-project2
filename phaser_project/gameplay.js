@@ -103,7 +103,7 @@ async function enemySpawn(gLink, wave) {
             }
             enemy.health = 1;
             enemy.animations.add("move", [0,1,2,3,4], 10, true);
-            //enemy.animations.add("dead", [5], 10, true);
+            enemy.animations.add("dead", [5, 6], 20, true);
             enemy.body.gravity.y = 0;
             enemy.body.velocity.x = 85;
             enemy.animations.play("move");
@@ -119,7 +119,7 @@ async function enemySpawn(gLink, wave) {
             enemy.animations.add("move", [0,1], 10, true);
             enemy.animations.add("hurt", [2], 10, true);
             enemy.animations.add("run", [3,4], 10, true);
-            enemy.animations.add("dead", [5], 10, true);
+            enemy.animations.add("dead", [5, 6], 20, true);
             enemy.body.gravity.y = 0;
             enemy.body.velocity.x = 70;
             enemy.animations.play("move");
@@ -127,6 +127,13 @@ async function enemySpawn(gLink, wave) {
         await sleep(1200);
     }
     //await sleep(12000);
+}
+
+async function enemyDie(gLink, enemy) {
+    enemy.animations.play("dead");
+    enemy.body.enable = false;
+    await sleep(enemyDeathTime * 1000);
+    enemy.destroy();
 }
 
 gamePlayState.prototype.update = function() {
@@ -166,8 +173,9 @@ gamePlayState.prototype.enemyHealth = function(attack, enemy) {
         //enemy.animations.play("run");
         enemy.body.velocity.x = 95;
     } else { // Construction enemies and Half-health businessmen
-        //enemy.animations.play("dead");
-        enemy.destroy();
+        // enemy.animations.play("dead");
+        // enemy.destroy();
+        enemyDie(this, enemy);
     }
     // Make sure to delete the attack sprite
     attack.kill();

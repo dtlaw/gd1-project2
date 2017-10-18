@@ -19,8 +19,10 @@
 
 	var game = new Phaser.Game(1334, 750, Phaser.AUTO, 'steel-bridge-defense', { preload: preload, create: create, update: update }, false, false);
 
+	// Consts that need to be changed for game feel purposes during debugging.
 	const swipeDistance = 200;
 	const swipeCooldown = 0.5;
+	const enemyDeathTime = 1.0;
 
 	function preload() {
 		game.load.image("button", "assets/button.png");

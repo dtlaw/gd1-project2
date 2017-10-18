@@ -45,9 +45,23 @@ gamePlayState.prototype.create = function() {
     game.input.onUp.add(this.inputCheck, this);
 
     this.player.animations.play("idle");
+
+    // ENEMIES
+    this.enemies = game.add.group();
+    this.enemies.enableBody = true;
+    // No gravity because arial view
+    for (let i = 0; i < 4; i++) {
+        // Eventually will be random in-lane spawn
+        let enemy = this.enemies.create(0, lanes[i].y, "bEnemy");
+        enemy.body.gravity.y = 0;
+        enemy.body.velocity.x = 80;
+    }
+    //this.enemies.animations.add("move", [0], 10, true);
 }
 
 gamePlayState.prototype.update = function() {
+    game.physics.arcade.collide(this.enemies, this.player, this.playerHealth, null, this);
+    //game.physics.arcade.collide(this.pAttack, this.enemies, this.enemyHealth, null, this);
 
 }
 

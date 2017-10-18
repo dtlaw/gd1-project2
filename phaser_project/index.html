@@ -5,7 +5,7 @@
     <title>Steel Bridge Defender</title>
 	<script type="text/javascript" src="js/phaser.min.js"></script>
 	<script type="text/javascript" src="preload.js"></script>
-	<script type="text/javascript" src="simpleAI.js"></script>
+	<!--<script type="text/javascript" src="simpleAI.js"></script>-->
 	<script type="text/javascript" src="gameplay.js"></script>
     <style type="text/css">
         body {
@@ -47,6 +47,7 @@
 		playText.anchor.setTo(0.5, 0.5);
 
 		game.state.add("Preload", preloadState);
+		game.state.add("Gameplay", gamePlayState);
 	}
 
 	function update() {
@@ -54,7 +55,6 @@
 	}
 
 	function clickPlay() {
-		game.state.add("Gameplay", gamePlayState);
 		game.state.start("Preload");
 	}
 </script>

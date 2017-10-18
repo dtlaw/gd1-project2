@@ -11,6 +11,7 @@ preloadState.prototype.preload = function() {
     game.load.image("road", "assets/sprites/RoadSprite.png");
     // Will be replaced with businessman spritesheet
     game.load.spritesheet("bEnemy", "assets/sprites/bm_run.png", 155, 155);
+    game.load.spritesheet("cEnemy", "assets/sprites/cw_run.png", 155, 155);
 }
 
 preloadState.prototype.create = function() {

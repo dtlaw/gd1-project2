@@ -79,14 +79,25 @@ async function enemySpawn(gLink) {
     // No gravity because arial view
     for (let i = 0; i < 4; i++) {
         if (i < 4) {
-            // Eventually will be random in-lane spawn
+            // Random in-lane spawn
             let randPos = Math.floor(Math.random()*4);
-            let enemy = gLink.enemies.create(-100, gLink.lanes[randPos].y, "bEnemy");
-            enemy.body.gravity.y = 0;
-            enemy.body.velocity.x = 80;
-            enemy.health = 2;
-            enemy.animations.add("move", [0,1], 10, true);
-            enemy.animations.play("move");
+            let randEnemy = Math.floor(Math.random()*2);
+            if (randEnemy === 0) {
+                let enemy = gLink.enemies.create(-100, gLink.lanes[randPos].y, "cEnemy");
+                enemy.health = 1;
+                enemy.animations.add("move", [0,1,2,3,4], 10, true);
+                enemy.body.gravity.y = 0;
+                enemy.body.velocity.x = 80;
+                enemy.animations.play("move");
+            } else {
+                let enemy = gLink.enemies.create(-100, gLink.lanes[randPos].y, "bEnemy");
+                enemy.health = 2;
+                enemy.animations.add("move", [0,1], 10, true);
+                enemy.body.gravity.y = 0;
+                enemy.body.velocity.x = 80;
+                enemy.animations.play("move");
+            }
+
         }
         await sleep(2000);
     }

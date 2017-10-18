@@ -204,7 +204,6 @@ gamePlayState.prototype.bridgeDamage = async function( enemy ) {
     }
 
     // console.log( this.enemies.children.length );
-
     if ( this.bridgeHealth > 1 ) {
         game.paused = true;
         this.road.visible = false;
@@ -214,16 +213,30 @@ gamePlayState.prototype.bridgeDamage = async function( enemy ) {
         game.input.enabled = false;
 
         if ( this.bridgeHealth === 3 ) {
-            // Left side explosion
+            this.rightFire = game.add.sprite(0, 0, "rightDmg");
+            let anim = this.rightFire.animations.add("start", [0,1,2], 10, false);
+            this.rightFire.animations.add("burn", [3,4,5], 10, true);
+            anim.onComplete.add(function() {this.rightFire.animations.play("burn");}, this);
+            this.rightFire.animations.play("start");
+            await sleep( 2000 );
+            this.rightFire.visible = false;
 
         } else { // health is 2
-            // Middle explosion
+            this.rightFire.visible = true;
+            this.midFire = game.add.sprite(0, 0, "middleDmg");
+            let anim = this.midFire.animations.add("start", [0,1,2], 10, false);
+            this.midFire.animations.add("burn", [3,4,5], 10, true);
+            anim.onComplete.add(function() {this.midFire.animations.play("burn");}, this);
+            this.midFire.animations.play("start");
+            await sleep( 2000 );
+            this.midFire.visible = false;
+            this.rightFire.visible = false;
 
         }
 
         // console.log( this.bridgeHealth );
 
-        await sleep( 2000 );
+
         this.road.visible = true;
         this.player.visible = true;
         this.enemies.visible = true;
@@ -232,7 +245,15 @@ gamePlayState.prototype.bridgeDamage = async function( enemy ) {
         game.paused = false;
         --this.bridgeHealth;
     } else {
+        this.rightFire.visible = true;
+        this.midFire.visible = true;
+
         // Right side explosion
+        this.leftFire = game.add.sprite(0, 0, "leftDmg");
+        let anim = this.leftFire.animations.add("start", [0,1,2], 10, false);
+        this.leftFire.animations.add("burn", [3,4,5], 10, true);
+        anim.onComplete.add(function() {this.leftFire.animations.play("burn");}, this);
+        this.leftFire.animations.play("start");
         // End game state
         if(!this.gameLost) {
             this.gameLost = true;

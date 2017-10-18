@@ -12,6 +12,9 @@ preloadState.prototype.preload = function() {
     // Will be replaced with businessman spritesheet
     game.load.spritesheet("bEnemy", "assets/sprites/bm_full.png", 155, 155);
     game.load.spritesheet("cEnemy", "assets/sprites/cw_full.png", 155, 155);
+    game.load.spritesheet("leftDmg", "assets/sprites/Boom1.png", 1334, 750);
+    game.load.spritesheet("middleDmg", "assets/sprites/Boom2.png", 1334, 750);
+    game.load.spritesheet("rightDmg", "assets/sprites/Boom3.png", 1334, 750);
 
     // FIXME: Make work, then change into a spritesheet
     game.load.image( "bridge", "assets/sprites/BridgeOnly.png" );

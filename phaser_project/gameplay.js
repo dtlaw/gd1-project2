@@ -129,11 +129,21 @@ async function enemySpawn(gLink, wave) {
     //await sleep(12000);
 }
 
-async function enemyDie(gLink, enemy) {
+async function enemyDie(enemy) {
     enemy.animations.play("dead");
     enemy.body.enable = false;
     await sleep(enemyDeathTime * 1000);
     enemy.destroy();
+}
+
+async function enemyHurt(enemy) {
+    enemy.animations.play("hurt");
+    enemy.body.enable = false;
+    --enemy.health;
+    await sleep(500);
+    enemy.body.enable = true;
+    enemy.body.velocity.x = 135;
+    enemy.animations.play("run");
 }
 
 gamePlayState.prototype.update = function() {
@@ -166,16 +176,11 @@ gamePlayState.prototype.enemyHealth = function(attack, enemy) {
     // Here is where enemy health will deteriorate from a player attack
     // Total health for an enemy depends on the type of enemy
     if (enemy.health > 1) { // For businessman enemies
-        //this.time.events.add(Phaser.Timer.SECOND*2, )
-        //enemy.animations.play("hurt");
-        enemy.health = enemy.health-1;
-        // Change animation and speed
-        //enemy.animations.play("run");
-        enemy.body.velocity.x = 95;
+        enemyHurt(enemy);
     } else { // Construction enemies and Half-health businessmen
         // enemy.animations.play("dead");
         // enemy.destroy();
-        enemyDie(this, enemy);
+        enemyDie(enemy);
     }
     // Make sure to delete the attack sprite
     attack.kill();

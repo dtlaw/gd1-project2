@@ -13,6 +13,9 @@ preloadState.prototype.preload = function() {
     game.load.spritesheet("bEnemy", "assets/sprites/bm_run.png", 155, 155);
     game.load.spritesheet("cEnemy", "assets/sprites/cw_run.png", 155, 155);
 
+    // FIXME: Make work, then change into a spritesheet
+    game.load.image( "bridge", "assets/sprites/BridgeOnly.png" );
+
     game.load.audio( "bgm", "assets/audio/background_loop.wav" );
     game.load.audio( "aChord", "assets/audio/a_chord.wav" );
     game.load.audio( "cChord", "assets/audio/c_chord.wav" );

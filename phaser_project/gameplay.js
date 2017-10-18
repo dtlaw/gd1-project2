@@ -117,9 +117,9 @@ async function enemySpawn(gLink, wave) {
             }
             enemy.health = 2;
             enemy.animations.add("move", [0,1], 10, true);
-            //enemy.animations.add("hurt", [2], 10, true);
-            //enemy.animations.add("run", [3,4], 10, true);
-            //enemy.animations.add("dead", [5], 10, true);
+            enemy.animations.add("hurt", [2], 10, true);
+            enemy.animations.add("run", [3,4], 10, true);
+            enemy.animations.add("dead", [5], 10, true);
             enemy.body.gravity.y = 0;
             enemy.body.velocity.x = 70;
             enemy.animations.play("move");

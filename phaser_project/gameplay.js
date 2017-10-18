@@ -175,7 +175,7 @@ gamePlayState.prototype.update = function() {
     console.log("enemies left: " + this.enemies.length);
     if (!this.gameLost && this.enemies.length === 0) {
         console.log("NO MORE ENEMIES LEFT! Wave: " + this.wave);
-        if (this.wave < 4) {
+        if (this.wave < 7) {
             ++this.wave;
             console.log("NEXT WAVE!");
             enemySpawn(this, this.wave);

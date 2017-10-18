@@ -52,7 +52,7 @@ gamePlayState.prototype.create = function() {
     // No gravity because arial view
     for (let i = 0; i < 4; i++) {
         // Eventually will be random in-lane spawn
-        let enemy = this.enemies.create(0, lanes[i].y, "bEnemy");
+        let enemy = this.enemies.create(0, this.lanes[i].y, "bEnemy");
         enemy.body.gravity.y = 0;
         enemy.body.velocity.x = 80;
     }

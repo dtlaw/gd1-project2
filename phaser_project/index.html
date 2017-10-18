@@ -26,6 +26,8 @@
 
 	function preload() {
 		game.load.image("button", "assets/button.png");
+		game.load.spritesheet("title", "assets/sprites/OpeningAnimation.png", 1334, 750);
+		game.load.image("background", "assets/sprites/BridgeBackground.png");
 	}
 
 	function create() {
@@ -41,11 +43,17 @@
 		game.scale.pageAlignVertically = true;
 		game.scale.pageAlignHorizontally = true;
 		game.scale.setMinMax(window.screen.availWidth, window.screen.availHeight);
+		game.add.sprite(0, 0, "background");
+		let title = game.add.sprite(0, -200, "title");
+		title.animations.add("animate", [0,1,2,3,4,5,6,7,8,9,10,11], 5, false);
+		title.animations.play("animate");
 
-		let playButton = game.add.button(game.world.centerX, game.world.centerY, "button", clickPlay, this);
+
+
+		let playButton = game.add.button(1000, 500, "button", clickPlay, this);
 		playButton.scale.setTo(10, 10);
-		playButton.anchor.setTo(0.5, 0);
-		let playText = game.add.text(game.world.centerX, game.world.centerY - 100, "Play", style);
+		playButton.anchor.setTo(0.5, 0.5);
+		let playText = game.add.text(1000, 500, "Play", style);
 		playText.anchor.setTo(0.5, 0.5);
 
 		game.state.add("Preload", preloadState);

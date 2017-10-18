@@ -14,7 +14,9 @@ gamePlayState.prototype.create = function() {
     this.lanes = new Array(4);
     // Bridge Health (aka player health for the game)
     this.bridgeHealth = 3;
-    this.bridge = game.add.sprite( game.world.width / 2, game.world.height / 2, "bridge" );
+    this.bridgeBG = game.add.sprite(0, 0, "background");
+    this.bridgeBG.visible = false;
+    this.bridge = game.add.sprite(0, 0, "bridge" );
     this.bridgeDamage.visible = false;
     this.gameWon = false;
     this.gameLost = false;
@@ -32,6 +34,9 @@ gamePlayState.prototype.create = function() {
 
     this.attacks = game.add.group();
     this.attacks.enableBody = true;
+
+    this.bridgeBG = game.add.sprite(0, 0, "background");
+    this.bridgeBG.visible = false;
 
     // game.add.text(game.world.centerX - 250, 48, "Swipe up or down to change lanes", style);
     // game.add.text(game.world.centerX - 150, 96, "Tap to fire an attack", style);
@@ -208,6 +213,7 @@ gamePlayState.prototype.bridgeDamage = async function( enemy ) {
         this.road.visible = false;
         this.player.visible = false;
         this.enemies.visible = false;
+        this.bridgeBG.visible = true;
         this.bridge.visible = true;
         game.input.enabled = false;
 
@@ -240,6 +246,7 @@ gamePlayState.prototype.bridgeDamage = async function( enemy ) {
         this.player.visible = true;
         this.enemies.visible = true;
         this.bridge.visible = false;
+        this.bridgeBG.visible = false;
         game.input.enabled = true;
         game.paused = false;
         --this.bridgeHealth;

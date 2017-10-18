@@ -15,6 +15,7 @@ gamePlayState.prototype.create = function() {
 
     this.downPos = 0;
 
+
     this.lanes = new Array(4);
 
     game.add.sprite(0,0, "road");
@@ -36,6 +37,7 @@ gamePlayState.prototype.create = function() {
     // PLAYER
     this.player = game.add.sprite( this.lanes[2].x, this.lanes[2].y, "player");
     this.player.lane = 1;
+    this.player.canAttack = true;
     this.player.animations.add("idle", [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
     let attackAnim = this.player.animations.add("attack",[8, 9, 10, 11, 12, 13, 14], 10, false);
     attackAnim.onComplete.add(this.resetAnim, this);
@@ -151,7 +153,7 @@ gamePlayState.prototype.inputCheck = function() {
         this.player.x = this.lanes[this.player.lane].x;
         this.player.y = this.lanes[this.player.lane].y;
     }
-    else {
+    else if(this.player.canAttack){
         console.log("he attac");
         this.musicBlast();
     }
@@ -159,9 +161,11 @@ gamePlayState.prototype.inputCheck = function() {
 
 gamePlayState.prototype.resetAnim = function() {
     this.player.animations.play("idle");
+    this.player.canAttack = true;
 }
 
 gamePlayState.prototype.musicBlast = function() {
+    this.player.canAttack = false;
     this.player.animations.play("attack");
 
     let soundIndex = Math.floor( Math.random() * ( this.player.attackSounds.length ));

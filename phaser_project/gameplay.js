@@ -16,6 +16,8 @@ gamePlayState.prototype.create = function() {
     this.downPos = 0;
 
     this.lanes = new Array(4);
+    // Bridge Health (aka player health for the game)
+    this.bridgeHealth = 3;
 
     game.add.sprite(0,0, "road");
     game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -87,14 +89,14 @@ async function enemySpawn(gLink) {
                 enemy.health = 1;
                 enemy.animations.add("move", [0,1,2,3,4], 10, true);
                 enemy.body.gravity.y = 0;
-                enemy.body.velocity.x = 80;
+                enemy.body.velocity.x = 70;
                 enemy.animations.play("move");
             } else { // Businessmen
                 let enemy = gLink.enemies.create(-100, gLink.lanes[randPos].y, "bEnemy");
                 enemy.health = 2;
                 enemy.animations.add("move", [0,1], 10, true);
                 enemy.body.gravity.y = 0;
-                enemy.body.velocity.x = 80;
+                enemy.body.velocity.x = 85;
                 enemy.animations.play("move");
             }
 
@@ -103,8 +105,11 @@ async function enemySpawn(gLink) {
     }
 }
 gamePlayState.prototype.update = function() {
-    //game.physics.arcade.overlap(this.enemies, this.player, this.playerHealth, null, this);
     game.physics.arcade.overlap(this.attacks, this.enemies, this.enemyHealth, null, this);
+    game.physics.arcade.overlap(this.enemies, this.player, this.bridgeDamage, null, this);
+
+    // Check if any enemies have gotten past the player
+    //HERE!!!
 }
 
 gamePlayState.prototype.enemyHealth = function(attack, enemy) {
@@ -117,8 +122,27 @@ gamePlayState.prototype.enemyHealth = function(attack, enemy) {
     }
     // Make sure to delete the attack sprite
     attack.kill();
-    //this.score +=5;
-    //this.scoreText.text = "Score: " + this.score;
+}
+
+gamePlayState.prototype.bridgeDamage = function(enemy, player) {
+    // Bridge takes damage when enemies get past the player!
+    // Entire game pauses for a second or two to watch the explosion
+    if (this.bridgeHealth > 1) {
+        if (this.bridgeHealth === 3) {
+            // Left side explosion
+
+        } else { // health is 2
+            // Middle explosion
+
+        }
+        // Update health
+        bridgeHealth = bridgeHealth-1;
+    } else {
+        // Right side explosion
+        // End game state
+        
+    }
+
 }
 
 gamePlayState.prototype.setDownPos = function() {

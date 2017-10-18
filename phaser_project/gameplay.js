@@ -19,12 +19,15 @@ gamePlayState.prototype.create = function() {
     this.lanes = new Array(4);
     // Bridge Health (aka player health for the game)
     this.bridgeHealth = 3;
+    this.gameWon = false;
+    this.gameLost = false;
 
     this.road = game.add.sprite(0,0, "road");
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
     let gHeight = game.world.height;
     let buff = 75; // Buffer for "top" of screen (water side of bridge)
+    this.wave = 1; // 3 waves total for entire game
     this.lanes[0] = new Phaser.Point(game.world.width - 200, gHeight - ((gHeight-buff)));
     this.lanes[1] = new Phaser.Point(game.world.width - 200, gHeight - ((gHeight-buff)/4*3));
     this.lanes[2] = new Phaser.Point(game.world.width - 200, gHeight - ((gHeight-buff)/4*2));
@@ -43,6 +46,7 @@ gamePlayState.prototype.create = function() {
     this.player.canAttack = true;
     this.player.animations.add("idle", [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
     let attackAnim = this.player.animations.add("attack",[8, 9, 10, 11, 12, 13, 14], 10, false);
+    this.canAttack = true;
     attackAnim.onComplete.add(this.resetAnim, this);
 
     this.player.attackSounds = new Array( 4 );
@@ -63,46 +67,69 @@ gamePlayState.prototype.create = function() {
     this.bgm.loopFull();
 
     // ENEMIES
-    this.enemies = game.add.group();
-    this.enemies.enableBody = true;
-    enemySpawn();
+    enemySpawn(this, this.wave);
 }
+
 // New for ES6: function to "pause" for certain amount of time
 function sleep(ms) {
+    //this.canAttack = false;
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 /*async function enemySpawn() {*/
-async function enemySpawn() {
-
-    // No gravity because aerial view
-    for (let i = 0; i < 4; i++) {
-        if (i < 4) {
-
-            // Random in-lane spawn
-            let randPos = Math.floor(Math.random()*4);
-            let randEnemy = Math.floor(Math.random()*2);
-            if (randEnemy === 0) { // Construction worker
-                let enemy = gLink.enemies.create(-100, game.lanes[randPos].y, "cEnemy");
-                enemy.health = 1;
-                enemy.animations.add("move", [0,1,2,3,4], 10, true);
-                enemy.body.gravity.y = 0;
-                enemy.body.velocity.x = 70;
-                enemy.animations.play("move");
-
-            } else { // Businessmen
-                let enemy = gLink.enemies.create(-100, game.lanes[randPos].y, "bEnemy");
-                enemy.health = 2;
-                enemy.animations.add("move", [0,1], 10, true);
-                enemy.body.gravity.y = 0;
-                enemy.body.velocity.x = 85;
-                enemy.animations.play("move");
-            }
-
+async function enemySpawn(gLink, wave) {
+    gLink.enemies = game.add.group();
+    gLink.enemies.enableBody = true;
+    let waveSize = 3+(3*wave);
+    let havePaused = false;
+    // No gravity because arial view
+    for (let i = 0; i < waveSize; i++) {
+        //if (i < 4) {
+        // Random in-lane spawn
+        let randPos = Math.floor(Math.random()*4);
+        let randEnemy = Math.floor(Math.random()*2);
+        if (wave === 1) {
+            randEnemy = 0;
+        } else if (wave === 3) {
+            randEnemy = 1;
         }
-        await sleep(2000);
+        if (randEnemy === 0) { // Construction worker
+            let enemy = gLink.enemies.create(-190, gLink.lanes[randPos].y, "cEnemy");
+            if (wave > 1 && havePaused === false) {
+                havePaused = true;
+                gLink.canAttack = false;
+                await sleep(5000);
+                gLink.canAttack = true;
+            }
+            enemy.health = 1;
+            enemy.animations.add("move", [0,1,2,3,4], 10, true);
+            //enemy.animations.add("dead", [5], 10, true);
+            enemy.body.gravity.y = 0;
+            enemy.body.velocity.x = 85;
+            enemy.animations.play("move");
+        } else if (randEnemy === 1) { // Businessmen
+            let enemy = gLink.enemies.create(-190, gLink.lanes[randPos].y, "bEnemy");
+            if (wave > 1 && havePaused === false) {
+                havePaused = true;
+                gLink.canAttack = false;
+                await sleep(5000);
+                gLink.canAttack = true;
+            }
+            enemy.health = 2;
+            enemy.animations.add("move", [0,1], 10, true);
+            //enemy.animations.add("hurt", [2], 10, true);
+            //enemy.animations.add("run", [3,4], 10, true);
+            //enemy.animations.add("dead", [5], 10, true);
+            enemy.body.gravity.y = 0;
+            enemy.body.velocity.x = 70;
+            enemy.animations.play("move");
+        }
+        //}
+        await sleep(1200);
     }
+    //await sleep(12000);
 }
+
 gamePlayState.prototype.update = function() {
     game.physics.arcade.overlap(this.attacks, this.enemies, this.enemyHealth, null, this);
 
@@ -113,17 +140,37 @@ gamePlayState.prototype.update = function() {
         }
     }
 
-    // Check if any enemies have gotten past the player
-    //HERE!!!
+    // Check all enemies defeated here!
+    console.log("enemies left: " + this.enemies.length);
+    if (this.enemies.length === 0) {
+        console.log("NO MORE ENEMIES LEFT! Wave: " + this.wave);
+        if (this.wave < 3) {
+            this.wave = this.wave+1;
+            console.log("NEXT WAVE!");
+            enemySpawn(this, this.wave);
+        } else {
+            // Stop all animations: Game is Won!
+            this.gameWon = true;
+            console.log("YOU WON THE GAME!");
+        }
+    }
+    // Delete any sprites that have gone off the right side of map
+    // *FINISH*
 }
 
 gamePlayState.prototype.enemyHealth = function(attack, enemy) {
     // Here is where enemy health will deteriorate from a player attack
     // Total health for an enemy depends on the type of enemy
     if (enemy.health > 1) { // For businessman enemies
+        //this.time.events.add(Phaser.Timer.SECOND*2, )
+        //enemy.animations.play("hurt");
         enemy.health = enemy.health-1;
+        // Change animation and speed
+        //enemy.animations.play("run");
+        enemy.body.velocity.x = 95;
     } else { // Construction enemies and Half-health businessmen
-        enemy.kill();
+        //enemy.animations.play("dead");
+        enemy.destroy();
     }
     // Make sure to delete the attack sprite
     attack.kill();
@@ -167,6 +214,7 @@ gamePlayState.prototype.bridgeDamage = async function( enemy ) {
     } else {
         // Right side explosion
         // End game state
+        this.gameLost = true;
     }
 }
 
@@ -199,19 +247,22 @@ gamePlayState.prototype.resetAnim = function() {
 }
 
 gamePlayState.prototype.musicBlast = function() {
-    this.player.canAttack = false;
-    this.player.animations.play("attack");
+    if (this.canAttack === true) {
+        this.player.canAttack = false;
+        this.player.animations.play("attack");
 
-    let soundIndex = Math.floor( Math.random() * ( this.player.attackSounds.length ));
-    this.player.attackSounds[ soundIndex ].play();
+        let soundIndex = Math.floor( Math.random() * ( this.player.attackSounds.length ));
+        this.player.attackSounds[ soundIndex ].play();
 
-    let attack = this.attacks.create(this.player.x, this.player.y, "attack");
-    attack.animations.add("move", [0, 1, 2], 15, true);
-    attack.animations.play("move");
-    // attack.scale.setTo(0.35, 0.35);  // Again, this was for the placeholders
-    attack.body.velocity.x = -200;
+        let attack = this.attacks.create(this.player.x, this.player.y, "attack");
+        attack.animations.add("move", [0, 1, 2], 15, true);
+        attack.animations.play("move");
+        // attack.scale.setTo(0.35, 0.35);  // Again, this was for the placeholders
+        attack.body.velocity.x = -200;
 
-    // Kill offscreen objectss
-    attack.checkWorldBounds = true;
-    attack.outOfBoundsKill = true;
+        // Kill offscreen objectss
+        attack.checkWorldBounds = true;
+        attack.outOfBoundsKill = true;
+    }
+    
 }

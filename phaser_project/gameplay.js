@@ -17,9 +17,11 @@ gamePlayState.prototype.create = function() {
     this.bridgeBG = game.add.sprite(0, 0, "background");
     this.bridgeBG.visible = false;
     this.bridge = game.add.sprite(0, 0, "bridge" );
-    this.bridgeDamage.visible = false;
+    this.bridge.bringToTop();
+    this.bridge.visible = false;
     this.gameWon = false;
     this.gameLost = false;
+    this.literallyJustStarted = true;
 
     this.road = game.add.sprite(0,0, "road");
     game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -102,11 +104,15 @@ async function enemySpawn(gLink, wave) {
         }
         if (randEnemy === 0) { // Construction worker
             let enemy = gLink.enemies.create(-190, gLink.lanes[randPos].y, "cEnemy");
-            if (wave > 1 && havePaused === false) {
+            if (!gLink.literallyJustStarted && havePaused === false) {
                 havePaused = true;
                 gLink.player.canAttack = false;
                 await sleep(5000);
                 gLink.player.canAttack = true;
+
+            }
+            else {
+                gLink.literallyJustStarted = false;
             }
             enemy.health = 1;
             enemy.animations.add("move", [0,1,2,3,4], 20, true);
@@ -116,11 +122,14 @@ async function enemySpawn(gLink, wave) {
             enemy.animations.play("move");
         } else if (randEnemy === 1) { // Businessmen
             let enemy = gLink.enemies.create(-190, gLink.lanes[randPos].y, "bEnemy");
-            if (wave > 1 && havePaused === false) {
+            if (!gLink.literallyJustStarted && havePaused === false) {
                 havePaused = true;
                 gLink.player.canAttack = false;
                 await sleep(5000);
                 gLink.player.canAttack = true;
+            }
+            else {
+                gLink.literallyJustStarted = false;
             }
             enemy.health = 2;
             enemy.animations.add("move", [0,1], 10, true);
@@ -183,6 +192,7 @@ gamePlayState.prototype.update = function() {
             }
         }
     }
+    console.log("Bridge is visible: " + this.bridge.visible);
 }
 
 gamePlayState.prototype.enemyHealth = function(attack, enemy) {
@@ -209,7 +219,7 @@ gamePlayState.prototype.bridgeDamage = async function( enemy ) {
 
     // console.log( this.enemies.children.length );
     if ( this.bridgeHealth > 1 ) {
-        game.paused = true;
+        // game.paused = true;
         this.road.visible = false;
         this.player.visible = false;
         this.enemies.visible = false;
@@ -248,7 +258,7 @@ gamePlayState.prototype.bridgeDamage = async function( enemy ) {
         this.bridge.visible = false;
         this.bridgeBG.visible = false;
         game.input.enabled = true;
-        game.paused = false;
+        // game.paused = false;
         --this.bridgeHealth;
     } else {
         this.rightFire.visible = true;

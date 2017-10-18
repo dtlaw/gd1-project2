@@ -191,6 +191,7 @@ gamePlayState.prototype.bridgeDamage = async function( enemy ) {
     // Bridge takes damage when enemies get past the player!
     // Entire game pauses for a second or two to watch the explosion
 
+    --this.wave;
     for ( i = this.enemies.children.length - 1; i >= 0; --i ) {
         this.enemies.children[ i ].destroy();
         console.log( i );

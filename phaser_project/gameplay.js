@@ -54,6 +54,9 @@ gamePlayState.prototype.create = function() {
 
     this.player.animations.play("idle");
 
+    this.bgm = game.add.audio( "bgm" );
+    this.bgm.loopFull();
+
     // ENEMIES
     //this.enemies = game.add.group();
     enemySpawn(this);

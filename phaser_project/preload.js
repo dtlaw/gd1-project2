@@ -10,7 +10,14 @@ preloadState.prototype.preload = function() {
     game.load.spritesheet("attack", "assets/sprites/projectile.png", 100, 100);
     game.load.image("road", "assets/sprites/RoadSprite.png");
     // Will be replaced with businessman spritesheet
-    game.load.image("bEnemy", "assets/sprites/bm_run.png", 125, 125);
+    game.load.spritesheet("bEnemy", "assets/sprites/bm_run.png", 155, 155);
+    game.load.spritesheet("cEnemy", "assets/sprites/cw_run.png", 155, 155);
+
+    game.load.audio( "bgm", "assets/audio/background_loop.wav" );
+    game.load.audio( "aChord", "assets/audio/a_chord.wav" );
+    game.load.audio( "cChord", "assets/audio/c_chord.wav" );
+    game.load.audio( "fChord", "assets/audio/f_chord.wav" );
+    game.load.audio( "gChord", "assets/audio/g_chord.wav" );
 }
 
 preloadState.prototype.create = function() {

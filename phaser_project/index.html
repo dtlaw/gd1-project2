@@ -19,7 +19,7 @@
 
 	var game = new Phaser.Game(1334, 750, Phaser.AUTO, 'steel-bridge-defense', { preload: preload, create: create, update: update }, false, false);
 
-	const swipeDistance = 50;
+	const swipeDistance = 200;
 	const swipeCooldown = 0.5;
 
 	function preload() {
@@ -36,8 +36,8 @@
 		// Enforce that we only track one pointer at a time
 		game.input.MAX_POINTERS = 1;
 		game.scale.ScaleMode = Phaser.ScaleManager.SHOW_ALL;
-		// game.scale.pageAlignVertically = true;
-		// game.scale.pageAlignHorizontally = true;
+		game.scale.pageAlignVertically = true;
+		game.scale.pageAlignHorizontally = true;
 		game.scale.setMinMax(window.screen.availWidth, window.screen.availHeight);
 
 		let playButton = game.add.button(game.world.centerX, game.world.centerY, "button", clickPlay, this);

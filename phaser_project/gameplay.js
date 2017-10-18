@@ -40,6 +40,12 @@ gamePlayState.prototype.create = function() {
     let attackAnim = this.player.animations.add("attack",[8, 9, 10, 11, 12, 13, 14], 10, false);
     attackAnim.onComplete.add(this.resetAnim, this);
 
+    this.player.attackSounds = new Array( 4 );
+    this.player.attackSounds[ 0 ] = game.add.audio( "aChord" );
+    this.player.attackSounds[ 1 ] = game.add.audio( "cChord" );
+    this.player.attackSounds[ 2 ] = game.add.audio( "fChord" );
+    this.player.attackSounds[ 3 ] = game.add.audio( "gChord" );
+
     // Reevaluate Scale after we get actual assets, this is just for the placeholders
     // this.player.scale.setTo(1, 1);
     game.input.onDown.add(this.setDownPos, this);
@@ -154,6 +160,10 @@ gamePlayState.prototype.resetAnim = function() {
 
 gamePlayState.prototype.musicBlast = function() {
     this.player.animations.play("attack");
+
+    let soundIndex = Math.floor( Math.random() * ( this.player.attackSounds.length ));
+    this.player.attackSounds[ soundIndex ].play();
+
     let attack = this.attacks.create(this.player.x, this.player.y, "attack");
     attack.animations.add("move", [0, 1, 2], 15, true);
     attack.animations.play("move");

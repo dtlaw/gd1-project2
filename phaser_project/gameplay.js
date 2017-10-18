@@ -79,7 +79,7 @@ function sleep(ms) {
 async function enemySpawn(gLink, wave) {
     gLink.enemies = game.add.group();
     gLink.enemies.enableBody = true;
-    let waveSize = 3+(3*wave);
+    let waveSize = 3+(1*wave);
     let havePaused = false;
 
     // No gravity because aerial view
@@ -134,7 +134,7 @@ async function enemySpawn(gLink, wave) {
 async function enemyDie(enemy) {
     enemy.animations.play("dead");
     enemy.body.enable = false;
-    await sleep(enemyDeathTime * 1000);
+    await sleep(enemyDeathTime * 800);
     enemy.destroy();
 }
 
@@ -142,7 +142,7 @@ async function enemyHurt(enemy) {
     enemy.animations.play("hurt");
     enemy.body.enable = false;
     --enemy.health;
-    await sleep(500);
+    await sleep(400);
     enemy.body.enable = true;
     enemy.body.velocity.x = 135;
     enemy.animations.play("run");
@@ -151,9 +151,10 @@ async function enemyHurt(enemy) {
 gamePlayState.prototype.update = function() {
     game.physics.arcade.overlap(this.attacks, this.enemies, this.enemyHealth, null, this);
 
+    // Checks for enemies reaching the end of bridge
     for ( i = 0; i < this.enemies.length; ++i ) {
-        if ( this.enemies.children[ i ].x > game.world.width ) {
-            this.bridgeDamage( this.enemies.children[ i ]);
+        if ( this.enemies.children[i].x > game.world.width ) {
+            this.bridgeDamage( this.enemies.children[i]);
             break;
         }
     }
@@ -185,8 +186,6 @@ gamePlayState.prototype.enemyHealth = function(attack, enemy) {
     if (enemy.health > 1) { // For businessman enemies
         enemyHurt(enemy);
     } else { // Construction enemies and Half-health businessmen
-        // enemy.animations.play("dead");
-        // enemy.destroy();
         enemyDie(enemy);
     }
     // Make sure to delete the attack sprite

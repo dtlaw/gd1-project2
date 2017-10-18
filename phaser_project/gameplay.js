@@ -214,6 +214,9 @@ gamePlayState.prototype.bridgeDamage = async function( enemy ) {
         this.enemies.children[ i ].destroy();
         console.log( i );
     }
+    for ( i = this.attacks.children.length - 1; i >= 0; --i) {
+        this.attacks.children[ i ].destroy();
+    }
 
     // console.log( this.enemies.children.length );
     if ( this.bridgeHealth > 1 ) {

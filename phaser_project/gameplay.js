@@ -82,14 +82,14 @@ async function enemySpawn(gLink) {
             // Random in-lane spawn
             let randPos = Math.floor(Math.random()*4);
             let randEnemy = Math.floor(Math.random()*2);
-            if (randEnemy === 0) {
+            if (randEnemy === 0) { // Construction worker
                 let enemy = gLink.enemies.create(-100, gLink.lanes[randPos].y, "cEnemy");
                 enemy.health = 1;
                 enemy.animations.add("move", [0,1,2,3,4], 10, true);
                 enemy.body.gravity.y = 0;
                 enemy.body.velocity.x = 80;
                 enemy.animations.play("move");
-            } else {
+            } else { // Businessmen
                 let enemy = gLink.enemies.create(-100, gLink.lanes[randPos].y, "bEnemy");
                 enemy.health = 2;
                 enemy.animations.add("move", [0,1], 10, true);

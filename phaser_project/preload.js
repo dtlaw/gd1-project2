@@ -18,6 +18,9 @@ preloadState.prototype.preload = function() {
     game.load.image( "winScreen", "assets/sprites/WinBridge.png");
     game.load.image( "gameOver", "assets/sprites/lose_screen.png");
 
+    game.load.spritesheet("swipeTutorial", "assets/sprites/swipe to move.png", 200, 500);
+    game.load.spritesheet("tapTutorial", "assets/sprites/tap to attack.png", 200, 200);
+
     game.load.audio( "bgm", "assets/audio/background_loop.wav" );
     game.load.audio( "aChord", "assets/audio/a_chord.wav" );
     game.load.audio( "cChord", "assets/audio/c_chord.wav" );

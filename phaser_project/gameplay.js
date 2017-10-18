@@ -33,8 +33,14 @@ gamePlayState.prototype.create = function() {
     this.attacks = game.add.group();
     this.attacks.enableBody = true;
 
-    game.add.text(game.world.centerX - 250, 48, "Swipe up or down to change lanes", style);
-    game.add.text(game.world.centerX - 150, 96, "Tap to fire an attack", style);
+    // game.add.text(game.world.centerX - 250, 48, "Swipe up or down to change lanes", style);
+    // game.add.text(game.world.centerX - 150, 96, "Tap to fire an attack", style);
+    this.swipeTut = game.add.sprite(game.world.centerX + 100, 100, "swipeTutorial");
+    this.swipeTut.animations.add("a", [0, 1, 2, 3, 4], 10, true);
+    this.swipeTut.animations.play("a");
+    this.tapTut = game.add.sprite(game.world.centerX - 300, 100, "tapTutorial");
+    this.tapTut.animations.add("a", [0, 1], 10, true);
+    this.tapTut.animations.play("a");
 
     // PLAYER
     this.player = game.add.sprite( this.lanes[2].x, this.lanes[2].y, "player");
@@ -246,15 +252,18 @@ gamePlayState.prototype.inputCheck = function() {
         --this.player.lane;
         this.player.x = this.lanes[this.player.lane].x;
         this.player.y = this.lanes[this.player.lane].y;
+        this.swipeTut.visible = false;
     }
     else if(game.input.activePointer.position.y - this.downPos >= swipeDistance
         && this.player.lane < 3) {
         ++this.player.lane;
         this.player.x = this.lanes[this.player.lane].x;
         this.player.y = this.lanes[this.player.lane].y;
+        this.swipeTut.visible = false;
     }
     else if(this.player.canAttack){
         this.musicBlast();
+        this.tapTut.visible = false;
     }
 }
 

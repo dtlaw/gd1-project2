@@ -12,6 +12,12 @@ preloadState.prototype.preload = function() {
     // Will be replaced with businessman spritesheet
     game.load.spritesheet("bEnemy", "assets/sprites/bm_run.png", 155, 155);
     game.load.spritesheet("cEnemy", "assets/sprites/cw_run.png", 155, 155);
+
+    game.load.audio( "bgm", "assets/audio/background_loop.wav" );
+    game.load.audio( "aChord", "assets/audio/a_chord.wav" );
+    game.load.audio( "cChord", "assets/audio/c_chord.wav" );
+    game.load.audio( "fChord", "assets/audio/f_chord.wav" );
+    game.load.audio( "gChord", "assets/audio/g_chord.wav" );
 }
 
 preloadState.prototype.create = function() {
